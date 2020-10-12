@@ -1,0 +1,30 @@
+<div id="main_drawing_div" #canvasDrawingC class="relative w-full h-full select-none"
+(panstart)="handlePanStart($event)"
+(panmove)="handlePanMove($event)"
+(panend)="handlePanEnd($event)"
+>
+  <div class="absolute right-0 bottom-0 mr-4 mb-4 flex">
+    <button
+      (click)="cancel()"
+      class=" w-24 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4
+      rounded mr-4">
+      Cancel
+    </button>
+    <button
+      (click)="finish()"
+      class="w-24 bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-4
+      rounded">
+      Done
+    </button>
+  </div>
+  <svg class="w-full h-full pointer-events-none">
+    <path
+      stroke-width="5"
+      stroke-linejoin="round"
+      stroke-linecap="round"
+      [attr.d]="path"
+      stroke="black"
+      fill="none" />
+  </svg>
+</div>
+

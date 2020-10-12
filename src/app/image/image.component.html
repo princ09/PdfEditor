@@ -1,0 +1,44 @@
+<div
+  class="absolute left-0 top-0 select-none"
+  [ngStyle]="{'width': (width + dw)+'px', 'height': (height + dh)+'px', 'transform': 'translate('+(x + dx)+'px,'+(y + dy)+'px)'}">
+
+  <div
+    (panstart)="handlePanStart($event)"
+    (panmove)="handlePanMove($event)"
+    (panend)="handlePanEnd($event)"
+    class="absolute w-full h-full cursor-grab"
+    class="operation"
+    class="cursor-grabbing"
+    [ngClass]="{'cursor-grabbing':operation == 'move'}">
+    <div
+     data-direction="left"
+      class="absolute border-dashed border-gray-600 h-full w-1 left-0 top-0 border-l cursor-ew-resize" ></div>
+    <div
+    data-direction="top"
+      class="absolute border-dashed border-gray-600 w-full h-1 left-0 top-0 border-t cursor-ns-resize" ></div>
+    <div
+    data-direction="bottom"
+      class="absolute border-dashed border-gray-600 w-full h-1 left-0 bottom-0 border-b cursor-ns-resize" ></div>
+    <div
+    data-direction="right"
+      class="absolute border-dashed border-gray-600 h-full w-1 right-0 top-0 border-r cursor-ew-resize" ></div>
+    <div
+    data-direction="left-top"
+      class=" absolute w-10 h-10 bg-blue-300 rounded-full left-0 top-0 cursor-nwse-resize transform
+      -translate-x-1/2 -translate-y-1/2 md:scale-25" ></div>
+    <div
+    data-direction="right-top"
+      class=" absolute w-10 h-10 bg-blue-300 rounded-full right-0 top-0 cursor-nesw-resize transform
+      translate-x-1/2 -translate-y-1/2 md:scale-25" ></div>
+    <div
+    data-direction="left-bottom"
+      class=" absolute w-10 h-10 bg-blue-300 rounded-full left-0 bottom-0 cursor-nesw-resize transform
+      -translate-x-1/2 translate-y-1/2 md:scale-25" ></div>
+    <div
+    data-direction="right-bottom"
+      class=" absolute w-10 h-10 bg-blue-300 rounded-full right-0 bottom-0 cursor-nwse-resize transform
+      translate-x-1/2 translate-y-1/2 md:scale-25" ></div>
+      <canvas class="w-full h-full" #imageCanvas id="imageCanvas"></canvas>
+
+  </div>
+</div>

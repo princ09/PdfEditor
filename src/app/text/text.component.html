@@ -1,0 +1,76 @@
+<div class="fixed z-10 top-0 left-0 right-0 h-12" *ngIf="operation">
+    <div
+      (tapout)="onBlurTool()"
+      (mousedown)="onFocusTool()"
+      (touchstart)="onFocusTool()"
+      class="h-full flex justify-center items-center bg-gray-300 border-b
+      border-gray-400">
+      <div class="mr-2 flex items-center">
+        <img src="assets/public/line_height.svg" class="w-6 mr-2" alt="Line height" />
+        <input
+          type="number"
+          min="1"
+          max="10"
+          step="0.1"
+          class="h-6 w-12 text-center flex-shrink-0 rounded-sm"
+          [value]="_lineHeight" />
+      </div>
+      <div class="mr-2 flex items-center">
+        <img src="assets/public/text.svg" class="w-6 mr-2" alt="Font size" />
+        <input
+          type="number"
+          min="12"
+          max="120"
+          step="1"
+          class="h-6 w-12 text-center flex-shrink-0 rounded-sm"
+          [value]="_size" />
+      </div>
+      <div class="mr-2 flex items-center">
+        <img src="assets/public/text-family.svg" class="w-4 mr-2" alt="Font family" />
+        <div class="relative w-40">
+          <select
+            [value]="_fontFamily"
+            (change)="onChangeFont()"
+            class="font-family">
+              <option *ngFor="let family of Families" value={family}>{{family}}</option>
+          </select>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 flex
+            items-center px-2 text-gray-700">
+            <svg
+              class="fill-current h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20">
+              <path
+                d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757
+                6.586 4.343 8z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<div
+  (tapout)="onBlur()"
+  class="absolute left-0 top-0 select-none"
+  [ngStyle]="{'transform': 'translate('+(x + dx)+'px,'+(y + dy)+'px)'}">
+  <div
+    (panstart)="handlePanStart($event)"
+    (panmove)="handlePanMove($event)"
+    (panend)="handlePanEnd($event)"
+    class="absolute w-full h-full cursor-grab border border-dotted
+    border-gray-500"
+    [ngClass]="{'cursor-grab':!operation}"
+    [ngClass]="{'cursor-grabbing':operation === 'move'}"
+    [ngClass]="{'editing':['edit', 'tool'].includes(operation)}"
+   ></div>
+  <div
+    #editable
+    (focus)="onFocus()"
+    (keydown)="onKeydown($event)"
+    (paste)="onPaste($event)"
+    contenteditable="true"
+    spellcheck="false"
+    class="outline-none whitespace-no-wrap"
+    [ngStyle]="{'font-size': _size+'px', 'font-family': _fontFamily+', serif', 'line-height': _lineHeight, '-webkit-user-select': 'text'}" ></div>
+</div>

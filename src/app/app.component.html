@@ -1,0 +1,146 @@
+<main class="flex flex-col items-center py-16 bg-gray-100 min-h-screen">
+  <div
+    class="fixed z-10 top-0 left-0 right-0 h-12 flex justify-center items-center
+    bg-gray-200 border-b border-gray-300">
+    <input
+      type="file"
+      name="pdf"
+      id="pdf"
+      (change)="onUploadPDF($event)"
+      class="hidden" />
+    <input
+      type="file"
+      id="image"
+      name="image"
+      class="hidden"
+      (change)="onUploadImage($event)" />
+    <label
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3
+      md:px-4 rounded mr-3 cursor-pointer md:mr-4"
+      for="pdf">
+      Choose PDF
+    </label>
+    <div
+      class="relative mr-3 flex h-8 bg-gray-400 rounded-sm overflow-hidden
+      md:mr-4">
+      <label
+        class="flex items-center justify-center h-full w-8 hover:bg-gray-500
+        cursor-pointer"
+        for="image"
+        [ngClass]="{'cursor-not-allowed bg-gray-500': selectedPageIndex < 0}">
+        <img src="assets/public/image.svg" alt="An icon for adding images" />
+      </label>
+      <label
+        class="flex items-center justify-center h-full w-8 hover:bg-gray-500
+        cursor-pointer"
+        for="text"
+        [ngClass]="{'cursor-not-allowed bg-gray-500': selectedPageIndex < 0}"
+        (click)="onAddTextField()">
+        <img src="assets/public/notes.svg" alt="An icon for adding text" />
+      </label>
+      <label
+        class="flex items-center justify-center h-full w-8 hover:bg-gray-500
+        cursor-pointer"
+        (click)="onAddDrawing()"
+        [ngClass]="{'cursor-not-allowed bg-gray-500': selectedPageIndex < 0}">
+        <img src="assets/public/gesture.svg" alt="An icon for adding drawing" />
+      </label>
+      <!-- coming soon -->
+      <!-- <label
+        class="flex items-center justify-center h-full w-8 hover:bg-gray-500
+        cursor-pointer"
+        class:cursor-not-allowed={selectedPageIndex < 0}>
+        <img src="add.svg" alt="An icon for create material" />
+      </label> -->
+    </div>
+    <div class="justify-center mr-3 md:mr-4 w-full max-w-xs hidden md:flex">
+      <img src="assets/public/edit.svg" class="mr-2" alt="a pen, edit pdf name" />
+      <input
+        placeholder="Rename your PDF here"
+        type="text"
+        class="flex-grow bg-transparent"
+        [(value)]="pdfName" />
+    </div>
+    <button
+      (click)="savePDF()"
+      class="w-20 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3
+      md:px-4 mr-3 md:mr-4 rounded"
+      [ngClass]="{'cursor-not-allowed bg-blue-700': pages.length === 0 || saving || !pdfFile}">
+      {{saving ? 'Saving' : 'Save'}}
+    </button>
+
+  </div>
+  <div
+      *ngIf="addingDrawing"
+      class="fixed z-10 top-0 left-0 right-0 border-b border-gray-300 bg-white
+      shadow-lg"
+      style="height: 50%;">
+      <app-drawingcanvas
+      (finishEvent)="drawingFinish($event)"
+      (cancelEvent)="cancelDrawing()" ></app-drawingcanvas>
+    </div>
+    <div *ngIf="pages.length">
+      <div class="flex justify-center px-5 w-full md:hidden">
+        <img src="assets/public/edit.svg" class="mr-2" alt="a pen, edit pdf name" />
+        <input
+          placeholder="Rename your PDF here"
+          type="text"
+          class="flex-grow bg-transparent"
+          [value]="pdfName" />
+      </div>
+      <div class="w-full">
+          <div
+          *ngFor="let page of pages;index as pIndex"
+            class="p-5 w-full flex flex-col items-center overflow-hidden"
+            (mousedown)="selectPage(pIndex)"
+            (touchstart)="selectPage(pIndex)">
+            <div
+              class="relative shadow-lg"
+              [ngClass]="{'shadow-outline': pIndex === selectedPageIndex}">
+              <app-pdfpage (measureEvent)="onMeasureEvent($event,pIndex)" [page]="page"></app-pdfpage>
+              <div
+                class="absolute top-0 left-0 transform origin-top-left"
+                [ngStyle]="{'transform': 'scale('+pagesScale[pIndex]+')', 'touch-action': 'none'}">
+                <div *ngFor="let object of allObjects[pIndex]">
+                    <app-image
+                      *ngIf="object.type === 'image'"
+                      (updateEvent) = "onUpdateEvent(object.id , $event)"
+                      [file]="object.file"
+                      [payload]="object.payload"
+                      [x]="object.x"
+                      [y]="object.y"
+                      [width]="object.width"
+                      [height]="object.height"
+                      [pageScale]="pagesScale[pIndex]"></app-image>
+                    <app-text
+                      *ngIf="object.type === 'text'"
+                      (updateEvent)="onUpdateEvent(object.id , $event)"
+                      (selectFontEvent)="selectFontFamily($event)"
+                      [text]="object.text"
+                      [x]="object.x"
+                      [y]="object.y"
+                      [size]="object.size"
+                      [lineHeight]="object.lineHeight"
+                      [fontFamily]="object.fontFamily"
+                      [pageScale]="pagesScale[pIndex]" ></app-text>
+                    <app-drawing
+                    *ngIf="object.type === 'drawing'"
+                    (updateEvent)="onUpdateEvent(object.id , $event)"
+                      [path]="object.path"
+                      [x]="object.x"
+                      [y]="object.y"
+                      [width]="object.width"
+                      [originWidth]="object.originWidth"
+                      [originHeight]="object.originHeight"
+                      [pageScale]="pagesScale[pIndex]" ></app-drawing>
+                  </div>
+
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    <div *ngIf="pages==undefined || pages.length==0" class="w-full flex-grow flex justify-center items-center">
+      <span class=" font-bold text-3xl text-gray-500">Drag something here</span>
+    </div>
+</main>

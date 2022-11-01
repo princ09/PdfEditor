@@ -1,10 +1,10 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 @Component({
   selector: 'app-image',
   templateUrl: './image.component.html',
   styleUrls: ['./image.component.css']
 })
-export class ImageComponent implements OnInit {
+export class ImageComponent implements OnInit, AfterViewInit {
   @Input() file;
   @Input() payload;
   @Input() width;
@@ -27,14 +27,15 @@ export class ImageComponent implements OnInit {
   constructor() { }
 
   ngAfterViewInit(){
-    
+    setTimeout(() => {
+      this.render();      
+    }, 20000);
 }
 
   ngOnInit(): void {
-    this.render();
   }
   render() {
-
+    debugger;
     this.imageCanvas.nativeElement.width = this.width;
     this.imageCanvas.nativeElement.height = this.height;
     this.imageCanvas.nativeElement.getContext("2d").drawImage(this.payload, 0, 0);
@@ -65,8 +66,8 @@ export class ImageComponent implements OnInit {
     console.log(event)
 
     console.log("working panMove")
-    const _dx = (event.detail.x - this.startX) / this.pageScale;
-    const _dy = (event.detail.y - this.startY) / this.pageScale;
+    const _dx = (event.center.x - this.startX) / this.pageScale;
+    const _dy = (event.center.y - this.startY) / this.pageScale;
     if (this.operation === "move") {
       this.dx = _dx;
       this.dy = _dy;
@@ -117,13 +118,13 @@ export class ImageComponent implements OnInit {
    handlePanStart(event) {
      console.log(event)
      console.log("working panStart")
-    this.startX = event.detail.x;
-    this.startY = event.detail.y;
-    if (event.detail.target === event.currentTarget) {
+    this.startX = event.center.x;
+    this.startY = event.center.y;
+    if (event.target.className === 'w-full h-full') {
       return (this.operation = "move");
     }
     this.operation = "scale";
-    this.directions = event.detail.target.dataset.direction.split("-");
+    this.directions = event.target.dataset.direction.split("-");
   }
   onPan(event){
     console.log("pan is working")

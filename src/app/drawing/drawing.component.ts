@@ -1,11 +1,11 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-drawing',
   templateUrl: './drawing.component.html',
   styleUrls: ['./drawing.component.css']
 })
-export class DrawingComponent implements OnInit {
+export class DrawingComponent implements OnInit, AfterViewInit {
   @Input() path: any;
   @Input() x: number;
   @Input() y: number;
@@ -24,20 +24,19 @@ export class DrawingComponent implements OnInit {
    @Output() updateEvent: EventEmitter<any> = new EventEmitter();
    ratio = this.originWidth / this.originHeight;
   constructor() { }
+  ngAfterViewInit(): void {
+    this.render();
+  }
 
   ngOnInit(): void {
-    this.render()
   }
   async  render() {
     this.svg.nativeElement.setAttribute("viewBox", `0 0 ${this.originWidth} ${this.originHeight}`);
   }
    handlePanMove(event) {
-    const _dx = (event.detail.x - this.startX) / this.pageScale;
-    const _dy = (event.detail.y - this.startY) / this.pageScale;
-    if (this.operation === "move") {
-      this.dx = _dx;
-      this.dy = _dy;
-    } else if (this.operation === "scale") {
+    const _dx = (event.center.x - this.startX) / this.pageScale;
+    const _dy = (event.center.y - this.startY) / this.pageScale;
+    if (this.operation === "scale") {
       if (this.direction === "left-top") {
         let d = Infinity;
         d = Math.min(_dx, _dy * this.ratio);
@@ -50,6 +49,9 @@ export class DrawingComponent implements OnInit {
         d = Math.max(_dx, _dy * this.ratio);
         this.dw = d;
       }
+    } else if (this.operation === "move") {
+      this.dx = _dx;
+      this.dy = _dy;
     }
   }
 
@@ -78,13 +80,13 @@ export class DrawingComponent implements OnInit {
     this.operation = "";
   }
    handlePanStart(event) {
-    this.startX = event.detail.x;
-    this.startY = event.detail.y;
-    if (event.detail.target === event.currentTarget) {
+    this.startX = event.center.x;
+    this.startY = event.center.y;
+    if (event.target === event.currentTarget) {
       return (this.operation = "move");
     }
     this.operation = "scale";
-    this.direction = event.detail.target.dataset.direction;
+    this.direction = event.target.dataset.direction;
   }
 
 }

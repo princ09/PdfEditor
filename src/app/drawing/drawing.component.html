@@ -1,7 +1,6 @@
 <div
   class="absolute left-0 top-0 select-none"
   [ngStyle]="{'width': (width + dw)+'px', 'height': ((width + dw)/ratio)+'px', 'transform': 'translate('+(x + dx)+'px,'+(y + dy)+'px)'}">
-  >
   <div
   (panstart)="handlePanStart($event)"
   (panmove)="handlePanMove($event)"
@@ -10,11 +9,11 @@
     border-dashed"
     [ngClass]="{'cursor-grabbing':operation === 'move','operation':true}">
     <div
-    *ngIf="direction=='left'"
+    data-direction="left"
       class="absolute left-0 top-0 w-10 h-10 bg-green-400 rounded-full
       cursor-nwse-resize transform -translate-x-1/2 -translate-y-1/2 md:scale-25"></div>
     <div
-    *ngIf="direction == 'right-bottom'"
+    data-direction="right-bottom"
       class="absolute right-0 bottom-0 w-10 h-10 bg-green-400 rounded-full
       cursor-nwse-resize transform translate-x-1/2 translate-y-1/2 md:scale-25" ></div>
   </div>

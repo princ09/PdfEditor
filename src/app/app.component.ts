@@ -115,7 +115,7 @@ export class AppComponent {
     }
   }
   drawingFinish(e){
-    const { originWidth, originHeight, path } = e.detail;
+    const { originWidth, originHeight, path } = e;
           let scale = 1;
           if (originWidth > 500) {
             scale = 500 / originWidth;
@@ -161,7 +161,7 @@ export class AppComponent {
     }
   }
   onUpdateEvent(id ,e){
-    this.updateObject(id, e.detail)
+    this.updateObject(id, e)
   }
   updateObject(id: any, detail: any) {
     this.allObjects = this.allObjects.map((objects, pIndex) =>

@@ -97,7 +97,6 @@
               "src/assets/utils/PDF.js",
               "src/assets/utils/prepareAssets.js",
               "src/assets/utils/tapout.js"
-
             ]
           }
         },
@@ -127,6 +126,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "PDFEditor"
+    }
+  },
+  "defaultProject": "PDFEditor",
+  "cli": {
+    "analytics": false
+  }
 }

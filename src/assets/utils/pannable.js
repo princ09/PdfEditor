@@ -4,6 +4,7 @@ export function pannable(node) {
   let y;
 
   function handleMousedown(event) {
+    debugger;
     x = event.clientX;
     y = event.clientY;
     const target = event.target;
@@ -19,6 +20,7 @@ export function pannable(node) {
   }
 
   function handleMousemove(event) {
+    debugger;
     const dx = event.clientX - x;
     const dy = event.clientY - y;
     x = event.clientX;
@@ -32,6 +34,7 @@ export function pannable(node) {
   }
 
   function handleMouseup(event) {
+    debugger;
     x = event.clientX;
     y = event.clientY;
 
@@ -44,6 +47,7 @@ export function pannable(node) {
     window.removeEventListener('mouseup', handleMouseup);
   }
   function handleTouchStart(event) {
+    debugger;
     if (event.touches.length > 1) return;
     const touch = event.touches[0];
     x = touch.clientX;
@@ -60,6 +64,7 @@ export function pannable(node) {
     window.addEventListener('touchend', handleTouchend);
   }
   function handleTouchmove(event) {
+    debugger;
     event.preventDefault();
     if (event.touches.length > 1) return;
     const touch = event.touches[0];
@@ -75,6 +80,7 @@ export function pannable(node) {
     );
   }
   function handleTouchend(event) {
+    debugger;
     const touch = event.changedTouches[0];
     x = touch.clientX;
     y = touch.clientY;

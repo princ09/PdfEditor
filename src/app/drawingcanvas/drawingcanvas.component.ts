@@ -24,12 +24,12 @@ export class DrawingcanvasComponent implements OnInit {
   }
   
   handlePanStart(event){
-    if (event.detail.target !== this.canvasDrawingC.nativeElement) {
+    if (event.target !== this.canvasDrawingC.nativeElement) {
       return (this.drawing = false);
     }
     this.drawing = true;
-    this.x = event.detail.x;
-    this.y = event.detail.y;
+    this.x = event.center.x;
+    this.y = event.center.y;
     this.minX = Math.min(this.minX, this.x);
     this.maxX = Math.max(this.maxX, this.x);
     this.minY = Math.min(this.minY, this.y);
@@ -40,8 +40,8 @@ export class DrawingcanvasComponent implements OnInit {
   
   handlePanMove(event){
     if (!this.drawing) return;
-    this.x = event.detail.x;
-    this.y = event.detail.y;
+    this.x = event.center.x;
+    this.y = event.center.y;
     this.minX = Math.min(this.minX, this.x);
     this.maxX = Math.max(this.maxX, this.x);
     this.minY = Math.min(this.minY, this.y);
@@ -67,7 +67,7 @@ export class DrawingcanvasComponent implements OnInit {
       originHeight: height,
       path: this.paths.reduce((acc, cur) => {
         return acc + cur[0] + (cur[1] + dx) + "," + (cur[2] + dy);
-      })
+      }, '')
     });
   }
 
